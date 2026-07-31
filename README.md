@@ -36,6 +36,12 @@ A Flutter mobile app for learning Italian, targeted at students and newcomers to
    flutter run
    ```
 
+## Deployment
+
+- The web app auto-deploys to GitHub Pages on every push to `main` at:
+  `https://fadelfffar.github.io/italian_lingo/`
+- One-time setup for the repository owner: enable **Settings → Pages → Source: GitHub Actions**.
+
 ## Dependencies
 
 - `flutter_tts` — Text-to-speech for Italian audio pronunciation
