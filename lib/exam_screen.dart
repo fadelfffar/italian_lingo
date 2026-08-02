@@ -7,10 +7,12 @@ import 'audio_service.dart';
 
 class ExamScreen extends StatefulWidget {
   final String studentName;
+  final AppLanguage language;
 
   const ExamScreen({
     Key? key,
     required this.studentName,
+    this.language = AppLanguage.italian,
   }) : super(key: key);
 
   @override
@@ -27,10 +29,20 @@ class _ExamScreenState extends State<ExamScreen> {
   bool showTranslations = true;
   Timer? _feedbackTimer;
 
+  bool get _isSwahili => widget.language == AppLanguage.swahili;
+
+  // Language-specific colour scheme
+  Color get _primaryColor =>
+      _isSwahili ? const Color(0xFF006600) : const Color(0xFF009246);
+  Color get _accentColor =>
+      _isSwahili ? const Color(0xFFCC0000) : const Color(0xFFCE2B37);
+
   @override
   void initState() {
     super.initState();
-    questions = QuestionRepository().getItalianQuestions();
+    questions = _isSwahili
+        ? QuestionRepository().getSwahiliQuestions()
+        : QuestionRepository().getItalianQuestions();
   }
 
   @override
@@ -63,6 +75,7 @@ class _ExamScreenState extends State<ExamScreen> {
           studentName: widget.studentName,
           score: score,
           totalQuestions: questions.length,
+          language: widget.language,
         ),
       ),
     );
@@ -74,7 +87,11 @@ class _ExamScreenState extends State<ExamScreen> {
         isCorrect = selectedAnswer == currentQuestion.correctAnswerIndex;
         if (isCorrect) score++;
         showFeedback = true;
-        AudioService.play(questions[currentQuestionIndex].audioPhrase);
+        final locale = _isSwahili ? 'sw-KE' : 'it-IT';
+        AudioService.play(
+          questions[currentQuestionIndex].audioPhrase,
+          locale: locale,
+        );
       });
       _handleFeedback();
     }
@@ -122,8 +139,20 @@ class _ExamScreenState extends State<ExamScreen> {
   }
 
   Widget _buildHeaderCard() {
+    final greeting = _isSwahili
+        ? '🇰🇪 Karibu, ${widget.studentName}!'
+        : '🇮🇹 Ciao, ${widget.studentName}!';
+    final quizTitle = _isSwahili
+        ? 'Mazoezi ya Kiswahili (Swahili Quiz)'
+        : 'Quiz di Italiano (Italian Quiz)';
+    final questionLabel = _isSwahili
+        ? 'Swali ${currentQuestionIndex + 1} kati ya ${questions.length}'
+        : 'Domanda ${currentQuestionIndex + 1} di ${questions.length}';
+    final questionLabelEn =
+        'Question ${currentQuestionIndex + 1} of ${questions.length}';
+
     return Card(
-      color: const Color(0xFF009246), // Italian green
+      color: _primaryColor,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
@@ -135,23 +164,23 @@ class _ExamScreenState extends State<ExamScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '🇮🇹 Ciao, ${widget.studentName}!',
+                    greeting,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: Colors.white,
                     ),
                   ),
-                  const Text(
-                    'Quiz di Italiano (Italian Quiz)',
-                    style: TextStyle(
+                  Text(
+                    quizTitle,
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
                   Text(
-                    'Domanda ${currentQuestionIndex + 1} di ${questions.length}',
+                    questionLabel,
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.white,
@@ -159,7 +188,7 @@ class _ExamScreenState extends State<ExamScreen> {
                   ),
                   if (showTranslations)
                     Text(
-                      'Question ${currentQuestionIndex + 1} of ${questions.length}',
+                      questionLabelEn,
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.white.withOpacity(0.8),
@@ -193,7 +222,7 @@ class _ExamScreenState extends State<ExamScreen> {
         value: progress,
         minHeight: 8,
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-        valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFCE2B37)), // Italian red
+        valueColor: AlwaysStoppedAnimation<Color>(_accentColor),
       ),
     );
   }
@@ -224,7 +253,10 @@ class _ExamScreenState extends State<ExamScreen> {
                     currentQuestion.questionTypeTranslation,
                     style: TextStyle(
                       fontSize: 11,
-                      color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.7),
                       fontStyle: FontStyle.italic,
                     ),
                   ),
@@ -294,7 +326,7 @@ class _ExamScreenState extends State<ExamScreen> {
     } else if (showFeedback && isSelected && !isCorrectAnswer) {
       backgroundColor = const Color(0xFFE57373);
     } else if (isSelected) {
-      backgroundColor = const Color(0xFF009246).withOpacity(0.2);
+      backgroundColor = _primaryColor.withOpacity(0.2);
     } else {
       backgroundColor = Theme.of(context).colorScheme.surface;
     }
@@ -311,8 +343,8 @@ class _ExamScreenState extends State<ExamScreen> {
         elevation: isSelected ? 8 : 2,
         shape: isSelected
             ? RoundedRectangleBorder(
-                side: const BorderSide(
-                  color: Color(0xFFCE2B37),
+                side: BorderSide(
+                  color: _accentColor,
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(12),
@@ -367,6 +399,12 @@ class _ExamScreenState extends State<ExamScreen> {
   }
 
   Widget _buildFeedbackCard() {
+    final correctText = _isSwahili ? '✓ Sahihi! Hongera!' : '✓ Corretto! Molto bene!';
+    final incorrectText =
+        _isSwahili ? '✗ Kosa! Jaribu tena!' : '✗ Sbagliato! Non arrenderti!';
+    final correctTextEn = 'Correct! Very good!';
+    final incorrectTextEn = "Wrong! Don't give up!";
+
     return Card(
       color: isCorrect ? const Color(0xFF4CAF50) : const Color(0xFFE57373),
       child: Padding(
@@ -374,7 +412,7 @@ class _ExamScreenState extends State<ExamScreen> {
         child: Column(
           children: [
             Text(
-              isCorrect ? '✓ Corretto! Molto bene!' : '✗ Sbagliato! Non arrenderti!',
+              isCorrect ? correctText : incorrectText,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 16,
@@ -384,7 +422,7 @@ class _ExamScreenState extends State<ExamScreen> {
             ),
             if (showTranslations)
               Text(
-                isCorrect ? 'Correct! Very good!' : "Wrong! Don't give up!",
+                isCorrect ? correctTextEn : incorrectTextEn,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
@@ -422,11 +460,15 @@ class _ExamScreenState extends State<ExamScreen> {
 
   Widget _buildSubmitButton() {
     final isLastQuestion = currentQuestionIndex == questions.length - 1;
+    final finishLabel = _isSwahili ? 'Maliza Mazoezi' : 'Termina il Quiz';
+    final confirmLabel = _isSwahili ? 'Thibitisha Jibu' : 'Conferma Risposta';
+    final finishLabelEn = 'Finish Quiz';
+    final confirmLabelEn = 'Confirm Answer';
 
     return ElevatedButton(
       onPressed: (selectedAnswer != -1 && !showFeedback) ? _submitAnswer : null,
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFCE2B37), // Italian red
+        backgroundColor: _accentColor,
         minimumSize: const Size(double.infinity, 56),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -436,7 +478,7 @@ class _ExamScreenState extends State<ExamScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            isLastQuestion ? 'Termina il Quiz' : 'Conferma Risposta',
+            isLastQuestion ? finishLabel : confirmLabel,
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -445,7 +487,7 @@ class _ExamScreenState extends State<ExamScreen> {
           ),
           if (showTranslations)
             Text(
-              isLastQuestion ? 'Finish Quiz' : 'Confirm Answer',
+              isLastQuestion ? finishLabelEn : confirmLabelEn,
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.white.withOpacity(0.8),
