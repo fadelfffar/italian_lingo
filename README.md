@@ -1,57 +1,67 @@
-# Italian Lingo
+# 🇮🇹 Italian Lingo
 
-A Flutter mobile app for learning Italian, targeted at students and newcomers to Italy.
+[![Flutter](https://img.shields.io/badge/Flutter-3.x-blue?logo=flutter)](https://flutter.dev)
+[![Deploy](https://github.com/fadelfffar/italian_lingo/actions/workflows/deploy-web.yml/badge.svg)](https://github.com/fadelfffar/italian_lingo/actions)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://fadelfffar.github.io/italian_lingo/)
 
-## Features
+A Flutter app for learning practical Italian — built for students and newcomers to Italy.
 
-- **Interactive Quiz**: Multiple-choice questions covering essential Italian vocabulary
-- **Italian-focused Content**: Vocabulary covering university life, bureaucracy, job search, housing, and social situations
-- **Audio Pronunciation**: Text-to-speech (TTS) for Italian phrases using `flutter_tts`
-- **Bilingual Support**: Toggle between Italian and English translations
-- **Progress Tracking**: Visual progress bar and score results
+**👉 [Try it live](https://fadelfffar.github.io/italian_lingo/)**
 
-## Topics Covered
+<!-- Add a screenshot or GIF here -->
+<!-- <img src="docs/screenshot.png" width="300" alt="Quiz screen" /> -->
 
-- University & enrollment (`Segreteria Studenti`, `numero di matricola`)
-- Bureaucracy & visas (`Permesso di soggiorno`, `Codice Fiscale`)
-- Job search & work (`Curriculum Vitae`, `colloquio di lavoro`, `tirocinio`)
-- Housing & daily life (`l'affitto`, bank accounts, SIM cards)
-- Social & networking (international student events, language basics)
+## ✨ Features
 
-## Getting Started
+- 📝 **Interactive Quiz** — Multiple-choice questions on essential Italian vocabulary
+- 🏛️ **Real-life Content** — University, bureaucracy, jobs, housing, and social life
+- 🔊 **Audio Pronunciation** — Text-to-speech for Italian phrases
+- 🌐 **Bilingual** — Toggle between Italian and English
+- 📊 **Progress Tracking** — Visual progress bar and score results
 
-1. **Clone the repo**
-   ```bash
-   git clone https://github.com/fadelfffar/italian_lingo.git
-   cd italian_lingo
-   ```
+## 📚 Topics Covered
 
-2. **Install dependencies**
-   ```bash
-   flutter pub get
-   ```
+| Topic | Examples |
+|---|---|
+| University & enrollment | `Segreteria Studenti`, `numero di matricola` |
+| Bureaucracy & visas | `Permesso di soggiorno`, `Codice Fiscale` |
+| Jobs & work | `Curriculum Vitae`, `colloquio di lavoro`, `tirocinio` |
+| Housing & daily life | `l'affitto`, bank accounts, SIM cards |
+| Social & networking | Student events, language basics |
 
-3. **Run the app**
-   ```bash
-   flutter run
-   ```
+## 🚀 Getting Started
 
-## Deployment
+### Prerequisites
 
-- The web app auto-deploys to GitHub Pages on every push to `main` at:
-  `https://fadelfffar.github.io/italian_lingo/`
-- One-time setup for the repository owner: enable **Settings → Pages → Source: GitHub Actions**.
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) 3.x or later
+- A device, emulator, or Chrome (for web)
 
-## Dependencies
+### Setup
 
-- `flutter_tts` — Text-to-speech for Italian audio pronunciation
-- `supabase_flutter` — Backend integration
-- `rive` — Animations
-- `flutter_bloc` — State management
-- `equatable` — Value equality
-- `webview_flutter` — In-app web views
+```bash
+git clone https://github.com/fadelfffar/italian_lingo.git
+cd italian_lingo
+flutter pub get
+flutter run
+```
 
-## Project Structure
+## 🌍 Deployment
+
+The web app auto-deploys to [GitHub Pages](https://fadelfffar.github.io/italian_lingo/) on every push to `main`.
+
+> One-time setup: enable **Settings → Pages → Source: GitHub Actions**.
+
+## 🧩 Tech Stack
+
+| Package | Purpose |
+|---|---|
+| `flutter_bloc` | State management |
+| `supabase_flutter` | Backend integration |
+| `flutter_tts` | Italian audio pronunciation |
+| `rive` | Animations |
+| `webview_flutter` | In-app web views |
+
+## 📁 Project Structure
 
 ```
 lib/
@@ -65,8 +75,6 @@ test/
   widget_test.dart             # Widget tests
 ```
 
-## Resources
+## 🤝 Contributing
 
-- [Flutter documentation](https://docs.flutter.dev/)
-- [Flutter cookbook](https://docs.flutter.dev/cookbook)
-- [Dart language tour](https://dart.dev/language)
+Contributions are welcome! Feel free to open an issue or submit a pull request.
